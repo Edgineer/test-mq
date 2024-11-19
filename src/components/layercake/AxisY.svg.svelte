@@ -12,7 +12,10 @@
 	export let textAnchor = "start";
 	export let formatTick = (d) => d;
 	export let ticks = 4;
-	/** If this is a number, it passes that along to the [d3Scale.ticks](https://github.com/d3/d3-scale) function. If this is an array, hardcodes the ticks to those values. If it's a function, passes along the default tick values and expects an array of tick values in return. */
+
+	// Labels for the top and bottom of the Y-axis
+	export let topLabel = "Conservative"; // Set a default for demonstration
+	export let bottomLabel = "Liberal";
 
 	$: tickVals = Array.isArray(ticks)
 		? ticks
@@ -22,6 +25,23 @@
 </script>
 
 <g class="axis y-axis" transform="translate({-$padding.left}, 0)">
+	<!-- Top Label -->
+	<text
+		x={$xRange[0] - 10}
+		y={$yScale.range()[1]} 
+		style="text-anchor: middle; font-size: 0.9em; font-weight: bold;">
+		{topLabel}
+	</text>
+
+	<!-- Bottom Label -->
+	<text
+		x={$xRange[0] - 10} 
+		y={$yScale.range()[0] + 20} 
+		style="text-anchor: middle; font-size: 0.9em; font-weight: bold;">
+		{bottomLabel}
+	</text>
+
+	<!-- Ticks and Gridlines -->
 	{#each tickVals as tick}
 		<g
 			class="tick tick-{tick}"
@@ -59,5 +79,9 @@
 
 	.tick text {
 		fill: var(--color-gray-600);
+	}
+
+	.axis text {
+		fill: var(--color-gray-800); /* Darker text for the labels */
 	}
 </style>

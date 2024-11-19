@@ -23,4 +23,6 @@
 </script>
 
 <Meta {title} {description} {url} {preloadFont} {keywords} />
-<Index />
+<body>
+	<Index />
+</body>

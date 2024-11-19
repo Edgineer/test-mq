@@ -37,5 +37,10 @@
 	"engines": {
 		"node": ">= 18.12.0"
 	},
-	"browserslist": "> 0.5%, last 4 versions, not ie <= 11, not ie_mob <= 11"
+	"browserslist": "> 0.5%, last 4 versions, not ie <= 11, not ie_mob <= 11",
+	"dependencies": {
+		"intersection-observer": "^0.12.2",
+		"layercake": "^8.4.2",
+		"scrollama": "^3.2.0"
+	}
 }
