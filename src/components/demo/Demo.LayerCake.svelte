@@ -6,8 +6,10 @@
 	import AxisY from "$components/layercake/AxisY.svg.svelte";
 	import scrollama from "scrollama"; // Import Scrollama
 	import mqData from "$components/demo/mq_data.csv";
-	import BVB from "$components/cases/BVB.svelte";
+	import events from "$components/demo/events.csv";
+	import Event from "$components/cases/Event.svelte";
 	import { fade } from 'svelte/transition';
+	import { parseCSVToMap } from "$utils/parseCSVToMap.js";
 	
 	let scroller = scrollama();
 
@@ -26,8 +28,8 @@
 		Math.max(...parsedData.map(d => d[x]))
 	];
 	const yDomain = [
-		Math.min(...parsedData.map(d => d[y])),
-		Math.max(...parsedData.map(d => d[y]))
+		Math.min(...parsedData.map(d => d[y])) - 3,
+		Math.max(...parsedData.map(d => d[y])) + 3
 	];
 
 	const padding = {
@@ -63,12 +65,12 @@
 		scroller.destroy();
 	});
 
-	// Define a function or array to determine when to render the component
-	let selectedIndices = [0, 2, 5]; // Example: Only render on these indices
+	let eventMap;
 
-	function shouldRenderComponent(index) {
-		return selectedIndices.includes(index); // Check if the current index is in the list
-	}
+    // Parse the imported CSV string
+    eventMap = parseCSVToMap(events);
+
+	const years = Array.from({ length: 2022 - 1937 + 1 }, (_, i) => 1937 + i); // Generate range from 1937 to 2022
 
 	let circleCount = 9; // Number of circles
 
@@ -116,12 +118,17 @@
 	<div class="container">
 <!-- Left: Scrolling Content -->
 		<div class="scroll-sections">
-			{#each Array(maxSteps) as _, i}
-				<div class="scroll-section">
-					{#if shouldRenderComponent(i)}
-					<BVB />
-					{/if}
-				</div>
+			{#each years as year}
+    			<div class="scroll-section">
+        			{#if eventMap.has(year)}
+						<Event 
+							title={eventMap.get(year).title} 
+							description={eventMap.get(year).description} 
+							year={year} 
+							image={eventMap.get(year).image} 
+						/>
+        			{/if}
+    			</div>
 			{/each}
 		</div>
 
