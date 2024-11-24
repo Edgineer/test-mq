@@ -1,134 +1,99 @@
 <script>
-	import { onMount, onDestroy } from "svelte";
-	import { LayerCake, Svg } from "layercake";
-	import Line from "$components/layercake/Line.svelte";
-	import AxisX from "$components/layercake/AxisX.svg.svelte";
-	import AxisY from "$components/layercake/AxisY.svg.svelte";
-	import scrollama from "scrollama"; // Import Scrollama
-	import mqData from "$components/demo/mq_data.csv";
-	import events from "$components/demo/events.csv";
-	import Event from "$components/cases/Event.svelte";
-	import { fade } from 'svelte/transition';
-	import { parseCSVToMap } from "$utils/parseCSVToMap.js";
-	
-	let scroller = scrollama();
+    import throttle from "lodash/throttle";
+    import { writable } from "svelte/store";
+    import { onMount, onDestroy } from "svelte";
+    import { LayerCake, Svg } from "layercake";
+    import Line from "$components/layercake/Line.svelte";
+    import AxisX from "$components/layercake/AxisX.svg.svelte";
+    import AxisY from "$components/layercake/AxisY.svg.svelte";
+    import scrollama from "scrollama"; 
+    import mqData from "$components/demo/mq_data.csv";
+    import events from "$components/demo/events.csv";
+	import judge from "$components/demo/judge.csv";
+    import Event from "$components/Event.svelte";
+    import Judge from "$components/Judge.svelte";
+    import { parseCSVToMap } from "$utils/parseCSVToMap.js";
+	import { parseJudgesToMap } from "$utils/parseJudgesCSV";
 
-	// Parse the data
-	let parsedData = mqData.map(d => ({
-		x: +d.year,
-		y: +d.value
-	}));
+    let scroller = scrollama();
 
-	const x = "x";
-	const y = "y";
+    // Reactive store for scrollIndex
+    const scrollIndexStore = writable(0);
+    let scrollIndex = 0; // Local value for immediate updates
 
-	// Domains for the axes
-	const xDomain = [
-		Math.min(...parsedData.map(d => d[x])),
-		Math.max(...parsedData.map(d => d[x]))
-	];
-	const yDomain = [
-		Math.min(...parsedData.map(d => d[y])) - 3,
-		Math.max(...parsedData.map(d => d[y])) + 3
-	];
+    // Judge-specific year
+    let curYearForJudge = null;
 
-	const padding = {
-		top: 20,
-		left: 50,
-		bottom: 50,
-		right: 20
-	};
+	let judgeMap = new Map(); // Map to hold the parsed judge data
+	let visibleJudges = []; // List of judges for the current year
 
-	let scrollIndex = 0; // Controlled by Scrollama
-	let maxSteps = parsedData.length; // Total steps
+    const years = Array.from({ length: 2022 - 1937 + 1 }, (_, i) => 1937 + i); // Generate range from 1937 to 2022
 
-	onMount(() => {
+    // Throttled handler for Scrollama
+    const throttledStepEnter = throttle((response) => {
+        scrollIndex = response.index;
+        scrollIndexStore.set(scrollIndex); // Update the store for LayerCake
+        curYearForJudge = 1937 + scrollIndex; // Update Judge's year directly
+		visibleJudges = judgeMap.get(curYearForJudge) || []
+		console.log(`Vis Judges are: ${visibleJudges}`)
 
-		// Set up Scrollama
-		scroller
-			.setup({
-				step: ".scroll-section", // Target each scrollable section
-				offset: 0.5, // Trigger in the middle of the viewport
-				progress: true // Enable progress tracking
-			})
-			.onStepEnter((response) => {
-				// Update the scroll index when a section is entered
-				scrollIndex = response.index;
-			})
-			.onStepProgress((response) => {
-				// Optionally use progress to handle fine-grained control
-				console.log("Progress:", response.progress);
-			});
-	});
+    }, 100);
 
-	onDestroy(() => {
-		scroller.destroy();
-	});
+    // Parse data
+    let parsedData = mqData.map(d => ({
+        x: +d.year,
+        y: +d.value
+    }));
+    const x = "x";
+    const y = "y";
+    const xDomain = [
+        Math.min(...parsedData.map(d => d[x])),
+        Math.max(...parsedData.map(d => d[x]))
+    ];
+    const yDomain = [
+        Math.min(...parsedData.map(d => d[y])) - 3,
+        Math.max(...parsedData.map(d => d[y])) + 3
+    ];
+    const padding = { top: 20, left: 50, bottom: 50, right: 20 };
 
-	let eventMap;
+    let eventMap = parseCSVToMap(events);
 
-    // Parse the imported CSV string
-    eventMap = parseCSVToMap(events);
+    onMount(async () => {
+        scroller
+            .setup({
+                step: ".scroll-section",
+                offset: 0.5,
+                progress: true,
+            })
+            .onStepEnter(throttledStepEnter);
+		
+		try {
+            judgeMap = parseJudgesToMap(judge);
+        } catch (error) {
+            console.error("Error parsing judges:", error);
+        }
+    });
 
-	const years = Array.from({ length: 2022 - 1937 + 1 }, (_, i) => 1937 + i); // Generate range from 1937 to 2022
-
-	let circleCount = 9; // Number of circles
-
-	// Define the data for each circle and its replacement at specific steps
-	let circleData = Array.from({ length: circleCount }, (_, i) => ({
-		id: i,
-		color: 'steelblue',
-		tooltip: `Circle ${i + 1}`,
-		replaceAtStep: i + 3, // Circle fades out and is replaced at this step
-		newCircle: {
-			id: `new-${i}`,
-			color: 'coral',
-			tooltip: `New Circle ${i + 1}`
-		}
-	}));
-
-	let circles = Array.from({ length: circleCount }, (_, i) => ({
-		initialY: 200 + i * 60, // Starting position (off-screen or hidden)
-		finalY: 50 + i * 60, // Final position (in view)
-		tooltipMessage: `Circle ${i + 1}` // Dynamic tooltip message
-	}));
-
-	let tooltipVisible = false;
-	let tooltipPosition = { x: 0, y: 0 };
-	let tooltipMessage = '';
-
-	// Tooltip behavior
-	function showTooltip(event, message) {
-		tooltipVisible = true;
-		tooltipMessage = message;
-		tooltipPosition = { x: event.clientX, y: event.clientY };
-	}
-
-	function moveTooltip(event) {
-		tooltipPosition = { x: event.clientX, y: event.clientY };
-	}
-
-	function hideTooltip() {
-		tooltipVisible = false;
-	}
-
+    onDestroy(() => {
+        scroller.destroy();
+    });
 </script>
 
 <main>
-	<div class="container">
-<!-- Left: Scrolling Content -->
+	<div class="outer-container">
+		<!-- Left: Scrolling Content -->
 		<div class="scroll-sections">
 			{#each years as year}
-    			<div class="scroll-section">
-        			{#if eventMap.has(year)}
+				<div class="scroll-section">
+					{#if eventMap.has(year)}
 						<Event 
 							title={eventMap.get(year).title} 
 							description={eventMap.get(year).description} 
 							year={year} 
 							image={eventMap.get(year).image} 
 						/>
-        			{/if}
-    			</div>
+					{/if}
+				</div>
 			{/each}
 		</div>
 
@@ -143,129 +108,88 @@
 				padding={padding}
 			>
 				<Svg>
+					{#if parsedData && scrollIndex !== null}
+						{console.log("Rendering Line: step =", scrollIndex + 1)}
+						<Line stroke="steelblue" strokeWidth="5" step={scrollIndex + 1} />
+					{/if}
 					<AxisX gridlines baseline />
 					<AxisY gridlines baseline />
-					<Line stroke="steelblue" strokeWidth="5" step={scrollIndex + 1} />
 				</Svg>
 			</LayerCake>
 		</div>
+	</div>
 
-		<div class="sticky-judges">
-			{#each circleData as circle, i}
-				<!-- Render the current circle if the scroll index is below its replace step -->
-				{#if scrollIndex < circle.replaceAtStep}
-					<div
-						class="circle"
-						style="background-color: {circle.color};"
-						in:fade
-						out:fade
-						on:mouseenter={(e) => showTooltip(e, circle.tooltip)}
-						on:mousemove={(e) => moveTooltip(e)}
-						on:mouseleave={() => hideTooltip()}
-					></div>
-				{:else}
-					<!-- Render the replacement circle -->
-					<div
-						class="circle"
-						style="background-color: {circle.newCircle.color};"
-						in:fade
-						out:fade
-						on:mouseenter={(e) => showTooltip(e, circle.newCircle.tooltip)}
-						on:mousemove={(e) => moveTooltip(e)}
-						on:mouseleave={() => hideTooltip()}
-					></div>
-				{/if}
-			{/each}
-		</div>
-
-		<!-- Tooltip -->
-		{#if tooltipVisible}
-		<div
-			class="tooltip"
-			style="left: {tooltipPosition.x + 10}px; top: {tooltipPosition.y + 10}px;"
-		>
-			{tooltipMessage}
-		</div>
-		{/if}
-
+	<!-- Bottom: Judges Section -->
+	<div class="sticky-judges">
+		{#each visibleJudges as judge (judge.name)}
+			<Judge
+				key={curYearForJudge}
+				url={judge.url}
+				name={judge.name}
+				startYear={judge.startYear}
+				endYear={judge.endYear}
+				curYear={curYearForJudge}
+			/>
+    	{/each}
 	</div>
 </main>
 
 <style>
-
-	.sticky-judges {
-		position: relative;
-		width: 100px;
-		height: 50%; /* Full height of the container */
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between; /* Spread circles evenly */
-		align-items: center; /* Center circles horizontally */
-	}
-
-	.circle {
-		width: 20px;
-		height: 20px;
-		background-color: steelblue;
-		border-radius: 50%;
-		border: 2px solid white;
-		box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-		cursor: pointer;
-	}
-
-	.tooltip {
-		position: absolute;
-		background-color: #333;
-		color: white;
-		padding: 5px 10px;
-		border-radius: 5px;
-		font-size: 0.9rem;
-		pointer-events: none;
-		white-space: nowrap;
-		transform: translate(-50%, -50%);
-	}
-
-
 	main {
 		display: flex;
-		flex-direction: column; /* Allow the entire page to scroll naturally */
-	}
-
-	.container {
-		display: flex;
+		flex-direction: column;
 		width: 100%;
-		height: auto; /* Allow the page height to grow naturally */
+		height: 100vh;
+		overflow: hidden;
 	}
 
+	/* Outer container for scrollable sections and sticky graph */
+	.outer-container {
+		display: flex;
+		flex-direction: row; /* Side-by-side layout */
+		width: 100%;
+		height: 80vh; /* Occupies 80% of the viewport height */
+		overflow-y: scroll; /* Allow scrolling */
+		scroll-snap-type: y mandatory; /* Enable snapping for scroll-sections */
+	}
+
+	/* Scroll-sections: Left side */
 	.scroll-sections {
-		width: 20%; /* Text occupies 20% of the width */
+		width: 20%; /* Occupies 20% of the width */
+		height: 100%; /* Full height of the outer-container */
+		display: flex;
+		flex-direction: column;
 	}
 
 	.scroll-section {
-		height: 100vh; /* Each section takes up full viewport height */
+		height: 100vh; /* Each section takes up the full viewport height */
 		padding: 1rem;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		scroll-snap-align: start; /* Snap each section to the top when scrolling */
+		scroll-snap-align: start; /* Snap sections to the viewport on scroll */
 	}
 
+	/* Sticky Graph: Right side */
 	.sticky-graph {
-		width: 70%; /* Graph occupies 80% of the width */
+		width: 80%; /* Occupies 80% of the width */
+		height: 100%; /* Full height of the outer-container */
 		position: sticky;
-		top: 0;
-		height: 100vh; /* Full height to match the viewport */
+		top: 0; /* Sticks to the top of the viewport */
+		background: white;
 		padding: 1rem;
-		background: white; /* Ensure it doesn’t overlay the text */
 	}
 
+	/* Judges Section: Positioned below */
 	.sticky-judges {
-		width: 10%; /* Graph occupies 80% of the width */
-		position: sticky;
-		top: 0;
-		height: 100vh; /* Full height to match the viewport */
-		padding: 1rem;
-		background: white; /* Ensure it doesn’t overlay the text */
+		width: 100%; /* Full width */
+		height: 20vh; /* Occupies 20% of the viewport height */
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+		background: white;
 	}
+
 
 </style>
+
