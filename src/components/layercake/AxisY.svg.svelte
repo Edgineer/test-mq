@@ -11,7 +11,7 @@
 	export let dyTick = -4;
 	export let textAnchor = "start";
 	export let formatTick = (d) => d;
-	export let ticks = 4;
+	export let ticks = 7;
 
 	// Labels for the top and bottom of the Y-axis
 	export let topLabel = "Conservative"; // Set a default for demonstration
@@ -27,15 +27,15 @@
 <g class="axis y-axis" transform="translate({-$padding.left}, 0)">
 	<!-- Top Label -->
 	<text
-		x={$xRange[0] - 10}
-		y={$yScale.range()[1]} 
+		x={$xRange[0]}
+		y={$yScale.range()[1] - 20} 
 		style="text-anchor: middle; font-size: 0.9em; font-weight: bold;">
 		{topLabel}
 	</text>
 
 	<!-- Bottom Label -->
 	<text
-		x={$xRange[0] - 10} 
+		x={$xRange[0]} 
 		y={$yScale.range()[0] + 20} 
 		style="text-anchor: middle; font-size: 0.9em; font-weight: bold;">
 		{bottomLabel}

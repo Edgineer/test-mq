@@ -112,8 +112,12 @@
 						{console.log("Rendering Line: step =", scrollIndex + 1)}
 						<Line stroke="steelblue" strokeWidth="5" step={scrollIndex + 1} />
 					{/if}
-					<AxisX gridlines baseline />
-					<AxisY gridlines baseline />
+					<AxisX 
+						gridlines 
+						baseline 
+						ticks={20}
+					/>
+					<AxisY gridlines baseline ticks{4} />
 				</Svg>
 			</LayerCake>
 		</div>

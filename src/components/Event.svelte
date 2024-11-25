@@ -7,16 +7,23 @@
 </script>
 
 <section id="event">
-    <h2>{title}</h2>
+    <div>
+        <span class="title">{title} </span>({year})
+    </div>
+    <img src={image} />
     <p>{description}</p>
-    <p><strong>Year:</strong> {year}</p>
-    <img src={image} alt="event" />
 </section>
 
 <style>
     img {
-        width: 128px;
+        width: 256px;
         height: auto;
+        padding-left: 10%;
+        
+    }
+
+    .title {
+        font-weight: bold;
     }
 
     #event {
