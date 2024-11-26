@@ -19,7 +19,6 @@
         width: 256px;
         height: auto;
         padding-left: 10%;
-        
     }
 
     .title {

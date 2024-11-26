@@ -1,15 +1,9 @@
-<script>
-
-    import DemoTip from "$components/demo/Demo.Tip.svelte";
-    
-    </script>
-    
     <h3>
         How are M-Q Scores Calculated?
     </h3>    
 
 	<p>
-        (Potentially insert cool visualization showing how calculations are derived)
+        M-Q Scores are constantly updated based on how justices vote relative to other justices. Let's gain a better understanding via a visual example.
 	</p>
     
     <style>

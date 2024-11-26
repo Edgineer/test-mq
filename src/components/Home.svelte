@@ -18,7 +18,7 @@
     import Law from "$components/Law.svelte";
     import Mq from "$components/Mq.svelte"
     import MqCalc from "$components/MqCalc.svelte"
-	import Area from "./layercake/Area.svelte";
+    import MqGraph from "$components/MqGraph.svelte";
 </script>
 
 <Banner />
@@ -28,6 +28,7 @@
     <Law />
     <Mq />
     <MqCalc />
+    <MqGraph />
 
 	<!-- <DemoLink />
 	<DemoImg />
