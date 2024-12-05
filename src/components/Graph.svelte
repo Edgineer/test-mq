@@ -166,6 +166,27 @@
         scroll-snap-type: y mandatory; /* Enable snapping */
     }
 
+	/* Styling the scrollbar */
+	.scroll-sections::-webkit-scrollbar {
+		width: 12px; /* Adjust scrollbar width */
+	}
+
+	.scroll-sections::-webkit-scrollbar-thumb {
+		background-color: #888; /* Scrollbar thumb color */
+		border-radius: 6px; /* Rounded corners for thumb */
+		border: 2px solid #ccc; /* Adds spacing and a contrasting border */
+	}
+
+	.scroll-sections::-webkit-scrollbar-thumb:hover {
+		background-color: #555; /* Darker color on hover */
+	}
+
+	.scroll-sections::-webkit-scrollbar-track {
+		background: #f1f1f1; /* Scrollbar track color */
+		border-radius: 6px; /* Rounded corners for track */
+	}
+
+
     .scroll-section {
         height: 100vh; /* Full viewport height for each section */
         padding: 1rem;

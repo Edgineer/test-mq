@@ -12,7 +12,7 @@ export function parseJudgesToMap(dataArray) {
         const endYear = row.End ? parseInt(row.End, 10) : 2023; // Default End to 2023 if null or empty
 
         if (!isNaN(startYear)) {
-            for (let year = startYear; year <= endYear; year++) {
+            for (let year = startYear; year < endYear; year++) {
                 if (!judgeMap.has(year)) {
                     judgeMap.set(year, []);
                 }

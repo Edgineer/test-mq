@@ -27,7 +27,7 @@
 <g class="axis y-axis" transform="translate({-$padding.left}, 0)">
 	<!-- Top Label -->
 	<text
-		x={$xRange[0]}
+		x={$xRange[0] + 50}
 		y={$yScale.range()[1] - 20} 
 		style="text-anchor: middle; font-size: 0.9em; font-weight: bold;">
 		{topLabel}
@@ -35,7 +35,7 @@
 
 	<!-- Bottom Label -->
 	<text
-		x={$xRange[0]} 
+		x={$xRange[0] + 30} 
 		y={$yScale.range()[0] + 20} 
 		style="text-anchor: middle; font-size: 0.9em; font-weight: bold;">
 		{bottomLabel}
