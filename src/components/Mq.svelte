@@ -5,7 +5,7 @@
     </script>
     
     <h3>
-        What is an M-Q Score?
+        What is an MQ Score?
     </h3>
     
     <p>

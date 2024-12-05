@@ -7,7 +7,7 @@
     const casesDict = {
         "0": {
             "header": "Initial state",
-            "description": "Here we assume a starting point where judges all have an MQ score of zero, and no voting record",
+            "description": "Assuming judges initially have no voting record and an MQ of zero",
             "center": [
                 { name: "John G. Roberts, Jr.", image: "https://api.oyez.org/sites/default/files/images/people/john_g_roberts_jr/john_g_roberts_jr.thumb.png" },
                 { name: "Ruth Bader Ginsburg", image: "https://api.oyez.org/sites/default/files/images/people/ruth_bader_ginsburg/ruth_bader_ginsburg.thumb.png" },
@@ -21,7 +21,7 @@
         },
         "1": {
             "header": "Case 1: Should pets be considered dependents?",
-            "description": "Another case description",
+            "description": "Law to let our furry friends help us save on taxes.",
             "left": [
                 { name: "Thurgood Marshall", image: "https://api.oyez.org/sites/default/files/images/people/thurgood_marshall/thurgood_marshall.thumb.png" },
                 { name: "Ruth Bader Ginsburg", image: "https://api.oyez.org/sites/default/files/images/people/ruth_bader_ginsburg/ruth_bader_ginsburg.thumb.png" },
@@ -34,8 +34,8 @@
             "results": "Justices who voted together now all have the same MQ score"
         },
         "2": {
-            "header": "Case 2: Should your first tattoo be free?",
-            "description": "Another case description",
+            "header": "Case 2: Should election day be a national holiday?",
+            "description": "Get paid and get more time for civic duty",
             "left": [
                 { name: "Thurgood Marshall", image: "https://api.oyez.org/sites/default/files/images/people/thurgood_marshall/thurgood_marshall.thumb.png" },
                 { name: "Ruth Bader Ginsburg", image: "https://api.oyez.org/sites/default/files/images/people/ruth_bader_ginsburg/ruth_bader_ginsburg.thumb.png" },
@@ -49,7 +49,7 @@
         },
         "3": {
             "header": "Case 3: Is RBG Notorious?",
-            "description": "Another case description",
+            "description": "Affectionately known as the Notorious RBG, but was Ruth Bader Ginsburg the real deal?",
             "left": [
                 { name: "Ruth Bader Ginsburg", image: "https://api.oyez.org/sites/default/files/images/people/ruth_bader_ginsburg/ruth_bader_ginsburg.thumb.png" },
             ],
@@ -59,7 +59,21 @@
                 { name: "John G. Roberts, Jr.", image: "https://api.oyez.org/sites/default/files/images/people/john_g_roberts_jr/john_g_roberts_jr.thumb.png" },
                 { name: "Antonin Scalia", image: "https://api.oyez.org/sites/default/files/images/people/antonin_scalia/antonin_scalia.thumb.png" },
             ],
-            "results": "RBG continued to pull away, but the other justices moved their MQ score towards each other"
+            "results": "RBG further diverged, but the rest clustered towards each other"
+        },
+        "4": {
+            "header": "Case 4: Imprison social media 'pranksters'",
+            "description": "For the good of society",
+            "left": [
+                { name: "Ruth Bader Ginsburg", image: "https://api.oyez.org/sites/default/files/images/people/ruth_bader_ginsburg/ruth_bader_ginsburg.thumb.png" },
+                { name: "Thurgood Marshall", image: "https://api.oyez.org/sites/default/files/images/people/thurgood_marshall/thurgood_marshall.thumb.png" },
+            ],
+            "right": [
+                { name: "Sandra Day O'Connor", image: "https://api.oyez.org/sites/default/files/images/people/sandra_day_oconnor/sandra_day_oconnor.thumb.png" },
+                { name: "John G. Roberts, Jr.", image: "https://api.oyez.org/sites/default/files/images/people/john_g_roberts_jr/john_g_roberts_jr.thumb.png" },
+                { name: "Antonin Scalia", image: "https://api.oyez.org/sites/default/files/images/people/antonin_scalia/antonin_scalia.thumb.png" },
+            ],
+            "results": "Both voting groups coalesced together, note not all shifts are equal"
         }
     };
 
@@ -76,6 +90,7 @@
 
 <section class="case-container">
     <p class="header">{caseData.header}</p>
+    <p>{caseData.description}</p>
 
     <Votes caseData={caseData} />
 
@@ -83,6 +98,10 @@
 </section>
 
 <style>
+
+    p {
+        text-align: center;
+    }
 
     .header {
         font-weight: bold;

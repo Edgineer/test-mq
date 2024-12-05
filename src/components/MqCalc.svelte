@@ -1,9 +1,9 @@
     <h3>
-        How are M-Q Scores Calculated?
+        How are MQ Scores Calculated?
     </h3>    
 
 	<p>
-        M-Q Scores are constantly updated based on how justices vote relative to other justices. Let's gain a better understanding via a visual example.
+        Let's further illustrate how MQ scores are calculated through a simplified visual example.
 	</p>
     
     <style>

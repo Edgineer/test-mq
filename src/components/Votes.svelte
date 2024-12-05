@@ -12,7 +12,7 @@
                     </div>
                 {/each}
                 {#if caseData.left?.length == 0}
-                <p>No Votes</p>
+                <p>None</p>
                 {/if}
             </div>
         </div>
@@ -26,7 +26,7 @@
                     </div>
                 {/each}
                 {#if caseData.right?.length == 0}
-                    <p>No Votes</p>
+                    <p>None</p>
                 {/if}
             </div>
         </div>

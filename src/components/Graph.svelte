@@ -127,7 +127,7 @@
 
     <!-- Judges Section -->
     <div class="sticky-judges">
-        {#if visibleJudges.length > 0}
+		{#if visibleJudges.length > 0}
             {#each visibleJudges as judge (judge.name)}
                 <Judge
                     key={curYearForJudge}
@@ -140,6 +140,7 @@
             {/each}
         {/if}
     </div>
+	<div class="cur-year">{curYearForJudge} Supreme Court Bench</div>
 </main>
 
 <style>
@@ -217,4 +218,9 @@
         border-top: 1px solid #ccc;
         padding: 0.5rem;
     }
+
+	.cur-year {
+		text-align: center;
+		font-weight: bold;
+	}
 </style>

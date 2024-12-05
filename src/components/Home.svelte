@@ -43,11 +43,11 @@
 <div id="demo">
 
     <section id="demo-link">
-        <h2>See our interactive justice dashboard</h2>
-        <p><a href="https://public.tableau.com/app/profile/izzy.valdivia/viz/SupremeCourtJusticeIdeologies/Comparison?publish=yes" target="_blank">Click here!</a></p>
-    </section>
-    
-
+        <h2>Open our dashboard for more insights</h2>
+        <a href="https://public.tableau.com/app/profile/anthony.nguyen2248/viz/shared/JYCH24YM2" target="_blank" class="button">
+            Open Tableau
+        </a>
+    </section> 
 </div>
 
 <style>
@@ -74,4 +74,39 @@
 		background: var(--color-mark);
 		padding: 0 8px;
 	}
+
+    #demo-link {
+    text-align: center; /* Center the content */
+    margin: 2rem 0; /* Add spacing around the section */
+    }
+
+    #demo-link h2 {
+        margin-bottom: 1rem; /* Add spacing below the heading */
+    }
+
+    #demo-link .button {
+        display: inline-block;
+        padding: 0.75rem 1.5rem; /* Adjust padding for a button-like appearance */
+        font-size: 1rem;
+        font-weight: bold;
+        color: white; /* Button text color */
+        background-color: grey; /* Button background color */
+        border: none; /* Remove default link styling */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer; /* Pointer cursor to indicate it's clickable */
+        text-decoration: none; /* Remove underline */
+        box-shadow: 0 4px grey; /* Shadow for a 3D press effect */
+        transition: transform 0.2s, box-shadow 0.2s; /* Smooth press effect */
+    }
+
+    #demo-link .button:active {
+        transform: translateY(2px); /* Move down to simulate a press */
+        box-shadow: 0 2px darkgrey; /* Reduce shadow for the press effect */
+    }
+
+    #demo-link .button:hover {
+        background-color: darkgrey; /* Slightly darker background on hover */
+    }
+
+
 </style>

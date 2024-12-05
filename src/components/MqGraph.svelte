@@ -35,6 +35,13 @@
             { name: "Thurgood Marshall", mqScore: -1, image: "https://api.oyez.org/sites/default/files/images/people/thurgood_marshall/thurgood_marshall.thumb.png" },
             { name: "Antonin Scalia", mqScore: 1, image: "https://api.oyez.org/sites/default/files/images/people/antonin_scalia/antonin_scalia.thumb.png" },
             { name: "Sandra Day O'Connor", mqScore: -1, image: "https://api.oyez.org/sites/default/files/images/people/sandra_day_oconnor/sandra_day_oconnor.thumb.png" }
+        ],
+        "4": [
+            { name: "John G. Roberts, Jr.", mqScore: 0.5, image: "https://api.oyez.org/sites/default/files/images/people/john_g_roberts_jr/john_g_roberts_jr.thumb.png" },
+            { name: "Ruth Bader Ginsburg", mqScore: -2.5, image: "https://api.oyez.org/sites/default/files/images/people/ruth_bader_ginsburg/ruth_bader_ginsburg.thumb.png" },
+            { name: "Thurgood Marshall", mqScore: -2, image: "https://api.oyez.org/sites/default/files/images/people/thurgood_marshall/thurgood_marshall.thumb.png" },
+            { name: "Antonin Scalia", mqScore: 0.5, image: "https://api.oyez.org/sites/default/files/images/people/antonin_scalia/antonin_scalia.thumb.png" },
+            { name: "Sandra Day O'Connor", mqScore: -0, image: "https://api.oyez.org/sites/default/files/images/people/sandra_day_oconnor/sandra_day_oconnor.thumb.png" }
         ]
     };
 
