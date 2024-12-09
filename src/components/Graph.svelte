@@ -189,7 +189,7 @@
 
 
     .scroll-section {
-        height: 100vh; /* Full viewport height for each section */
+        height: 25vh; /* Full viewport height for each section */
         padding: 1rem;
         display: flex;
         flex-direction: column;
